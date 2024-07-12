@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Menu from './menu'
 import { UserProvider } from '@auth0/nextjs-auth0/client';
+import Api from './api'
 import ProfileClient from "./userData/userProfile";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
     <UserProvider>
 	<body className={inter.className}>
 		<Menu></Menu>
+    <Api/>
 		{children}</body>
     </UserProvider>
     </html>

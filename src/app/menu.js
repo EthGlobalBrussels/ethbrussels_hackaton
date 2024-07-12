@@ -15,7 +15,7 @@ export default function Menu() {
 	  <div>
 		<div className={menu.wrapper}>
 		  <Link href='/' style={{ alignSelf: 'center' }}>
-			Available bet
+			Available bets
 		  </Link>
 		  {!user && (
 			<a href="/api/auth/login" style={{ fontSize: '30px' }}>

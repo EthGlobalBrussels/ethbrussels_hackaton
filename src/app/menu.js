@@ -1,9 +1,9 @@
 'use client'
 
-import ProfileClient from './userData/userProfile';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import menu from './menu.module.css';
 import Link from 'next/link';
+import ConnectWallet from './userData/connectWallet';
 
 export default function Menu() {
 	const { user, error, isLoading } = useUser();
@@ -17,25 +17,9 @@ export default function Menu() {
 		  <Link href='/' style={{ alignSelf: 'center' }}>
 			Available bet
 		  </Link>
-		  {!user && (
-			<a href="/api/auth/login" style={{ fontSize: '30px' }}>
-			  Login
-			</a>
-		  )}
-		  {user && (
-			<a href="/api/auth/logout" style={{ fontSize: '30px' }}>
-			  Logout
-			</a>
-		  )}
-		</div>
-		{user && (
-		  <div>
-			<img src={user.picture} alt={user.name} />
-			<h2>{user.name}</h2>
-			<p>{user.email}</p>
+			<ConnectWallet/>
 		  </div>
-		)}
-	  </div>
+		</div>
 	);
   }
 

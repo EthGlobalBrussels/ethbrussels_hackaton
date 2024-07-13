@@ -12,7 +12,7 @@ const functionsConsumerAbi = require("../abi/functionsClient.json");
 const ethers = require("ethers");
 require("@chainlink/env-enc").config();
 
-const consumerAddress = "0x68E1235589c7a700aFCa59092b2BfBF5fCE18d62"; // REPLACE this with your Functions consumer address
+const consumerAddress = "0xf68E80327c1FFf63C3eE7D251A940293d80a8B14"; // REPLACE this with your Functions consumer address
 const subscriptionId = 11101; // REPLACE this with your subscription ID
 
 const makeRequestMumbai = async () => {
@@ -23,12 +23,13 @@ const makeRequestMumbai = async () => {
   const explorerUrl = "https://testnet.snowtrace.io/";
 
   // Initialize functions settings
-  const source = fs
-    .readFileSync(path.resolve(__dirname, "source.js"))
+  const source_lol = fs
+    .readFileSync(path.resolve(__dirname, "source_lol.js"))
     .toString();
 
   // const args = ["ETH", "USD"];
-  const args = ["ETH", "USD"];
+  // const args = ["ETH", "USD"];
+  const args = ["112352881166864380"];
   const gasLimit = 300000;
 
   // Initialize ethers signer and provider to interact with the contracts onchain
@@ -53,7 +54,7 @@ const makeRequestMumbai = async () => {
   console.log("Start simulation...");
 
   const response = await simulateScript({
-    source: source,
+    source: source_lol,
     args: args,
     bytesArgs: [], // bytesArgs - arguments can be encoded off-chain to bytes.
     secrets: {}, // no secrets in this example
@@ -113,9 +114,9 @@ const makeRequestMumbai = async () => {
     signer
   );
 
-  // Actual transaction call
+//   // Actual transaction call
   const transaction = await functionsConsumer.sendRequest(
-    source, // source
+    source_lol, // source_lol
     "0x", // user hosted secrets - encryptedSecretsUrls - empty in this example
     0, // don hosted secrets - slot ID - empty in this example
     0, // don hosted secrets - version - empty in this example

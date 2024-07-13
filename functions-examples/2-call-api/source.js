@@ -6,8 +6,12 @@
 // Refer to https://github.com/smartcontractkit/functions-hardhat-starter-kit#javascript-code
 
 // Arguments can be provided when a request is initated on-chain and used in the request source code as shown below
-const fromSymbol = args[0];
-const toSymbol = args[1];
+
+// const fromSymbol = args[0];
+// const toSymbol = args[1];
+
+const fromSymbol = "ETH";
+const toSymbol = "USD";
 
 // make HTTP request
 const url = `https://min-api.cryptocompare.com/data/pricemultifull`;
@@ -46,4 +50,6 @@ console.log(`${fromSymbol} price is: ${price.toFixed(2)} ${toSymbol}`);
 
 // Solidity doesn't support decimals so multiply by 100 and round to the nearest integer
 // Use Functions.encodeUint256 to encode an unsigned integer to a Buffer
+
 return Functions.encodeUint256(Math.round(price * 100));
+// return Math.round(price * 100);

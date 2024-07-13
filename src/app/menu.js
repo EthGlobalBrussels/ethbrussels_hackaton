@@ -13,12 +13,11 @@ export default function Menu() {
   
 	return (
 	  <div>
-		<div className={menu.wrapper}>
-		  <Link href='/' style={{ alignSelf: 'center' }}>
-			Available bets
-		  </Link>
+		<div className="w=screen justify-right  items-right text-right">
+	
+	
 		  {!user && (
-			<a href="/api/auth/login" style={{ fontSize: '30px' }}>
+			<a href="/api/auth/login" className='bg-gradient-to-r from-sky-400 to-pink-600 px-10 py-2 rounded-full'>
 			  Login
 			</a>
 		  )}

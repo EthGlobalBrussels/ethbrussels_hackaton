@@ -25,9 +25,9 @@ const TournamentList = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data); // Log the response data to see its structure
+        console.log(data); 
         if (data.data && data.data.schedule && Array.isArray(data.data.schedule.events)) {
-          setEvents(data.data.schedule.events); // Assuming data.data.schedule.events is an array of events
+          setEvents(data.data.schedule.events);
         } else {
           throw new Error('Invalid data format received');
         }
@@ -40,7 +40,7 @@ const TournamentList = () => {
     };
 
     fetchData();
-  }, []); // Empty dependency array ensures useEffect runs only once
+  }, []);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -49,8 +49,8 @@ const TournamentList = () => {
     <div>
       <h1 className='w-full m-auto justify-center items-centerss text-center'>List of Scheduled Tournaments</h1>
       <ul>
-        {events.slice(0, 5).map((event) => ( // Render the first 5 events
-          <li key={event.match.id} className=' border border-1 border-white p-3 m-3 rounded-xl  justify-center items-center m-auto'>
+        {events.slice(0, 5).map((event) => ( 
+          <li key={event.match.id} className=' border border-1 border-white gap-4 my-7  p-4 rounded-xl  justify-center items-center'>
             <div>Tournament Name: {event.league.name}</div>
             <div>Match ID: {event.match.id}</div>
             <div>Teams: {event.match.teams.map(team => team.name).join(' vs ')}</div>

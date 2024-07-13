@@ -38,7 +38,6 @@ export default function RootLayout({ children }) {
               ArenaBet
             </h1>
             <Menu />
-			<SetTransaction matchId={5} team={0}/>
             {children}
           </div>
         </body>

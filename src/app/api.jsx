@@ -1,13 +1,14 @@
-"use client";
+'use client';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import sendTx from './transaction/setTransaction';
+import { sendTx } from './transaction/setTransaction';
 
 const TournamentList = () => {
   const [selectedMatchId, setSelectedMatchId] = useState(null);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filter, setFilter] = useState('unstarted'); // New state for filtering
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,8 +47,10 @@ const TournamentList = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  // Filter events where match state is 'unstated'
-  const filteredEvents = events.filter(event => event.state === 'unstarted');
+  // Filter events based on the selected filter
+  const filteredEvents = events.filter(event => 
+    filter === 'unstarted' ? event.state === 'unstarted' : event.state === 'completed'
+  );
 
   const handleSelectMatch = (matchId) => {
     if (selectedMatchId === matchId) {
@@ -69,30 +72,56 @@ const TournamentList = () => {
   return (
     <div className=''>
       <h1 className='w-96 m-auto justify-center items-center text-center'>List of Scheduled Tournaments</h1>
+      <div className='flex justify-center my-4'>
+        <button 
+          className={`mx-2 px-4 py-2 rounded-full ${filter === 'unstarted' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+          onClick={() => setFilter('unstarted')}
+        >
+          Unstarted
+        </button>
+        <button 
+          className={`mx-2 px-4 py-2 rounded-full ${filter === 'completed' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+          onClick={() => setFilter('completed')}
+        >
+          Finished
+        </button>
+      </div>
       <ul className='grid grid-cols-2 gap-4'>
         {filteredEvents.slice(0, 6).map((event) => (
-          <li key={event.match.id} className=' border-4 border-pink-500 shadow-inner shadow-black bg-gradient-to-b from-blue-800 to-purple-900 gap-4 my-7 p-4 rounded-xl justify-center items-center'>
+          <li key={event.match.id} className='border-4 border-pink-500 shadow-inner shadow-black bg-gradient-to-b from-blue-800 to-purple-900 gap-4 my-7 p-4 rounded-xl justify-center items-center'>
             <div>Tournament Name: {event.league.name}</div>
-            <div>Status: {event.state}</div>
+            <div className={event.state === 'unstarted' ? 'text-green-500' : 'text-red-500'}>
+              Status: {event.state === 'unstarted' ? 'Unstarted' : 'Finished'}
+            </div>
             <div>Teams: {event.match.teams.map(team => team.name).join(' vs ')}</div>
             <div>Start Time: {new Date(event.startTime).toLocaleString()}</div>
-            <div className='flex'>
-              <h1
-                className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full cursor-pointer'
-              onClick={() => handleSelectMatch(event.match.id)}
-              >
-                Select Match
-              </h1>
-            </div>
-            {selectedMatchId === event.match.id && (
-              <motion.div className='mt-4 grid grid-cols-2 gap-2'>
-                <button onClick={() => handleClick(event.match.id, event.match.teams[0])} className='shadow-lg mx-auto my-1 px-5 w-40 bg-gradient-to-r from-green-500 to-blue-600 py-2 rounded-full'>
-                  Bet {event.match.teams[0].name}
+            {filter === 'unstarted' ? (
+              <div>
+                <div className='flex'>
+                  <h1
+                    className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full cursor-pointer'
+                    onClick={() => handleSelectMatch(event.match.id)}
+                  >
+                    Select Match
+                  </h1>
+                </div>
+                {selectedMatchId === event.match.id && (
+                  <motion.div className='mt-4 grid md:grid-cols-2 gap-2'>
+                    <button onClick={() => sendTx(event.match.id, 0)} className='shadow-lg mx-auto my-1 px-5 w-40 bg-gradient-to-r from-green-500 to-blue-600 py-2 rounded-full'>
+                      Bet {event.match.teams[0].name}
+                    </button>
+                    <button onClick={() => sendTx(event.match.id, 1)} className='shadow-lg mx-auto my-1 px-5 w-40 bg-gradient-to-r from-red-500 to-yellow-600 py-2 rounded-full'>
+                      Bet {event.match.teams[1].name}
+                    </button>
+                  </motion.div>
+                )}
+              </div>
+            ) : (
+              <div className='flex'>
+                <button className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full'>
+                  Claim
                 </button>
-                <button onClick={() => handleClick(event.match.id, event.match.teams[1])} className='shadow-lg mx-auto my-1 px-5 w-40 bg-gradient-to-r from-red-500 to-yellow-600 py-2 rounded-full'>
-                  Bet {event.match.teams[1].name}
-                </button>
-              </motion.div>
+              </div>
             )}
           </li>
         ))}

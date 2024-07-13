@@ -13,10 +13,8 @@ export default function Menu() {
   
 	return (
 	  <div>
-		<div className={menu.wrapper}>
-		  <Link href='/' style={{ alignSelf: 'center' }}>
-			Available bet
-		  </Link>
+		<div >
+	
 			<ConnectWallet/>
 		  </div>
 		</div>

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { sendTx } from './transaction/setTransaction';
+import { sendTx } from './transaction/getWinners';
 
 const TournamentList = () => {
   const [selectedMatchId, setSelectedMatchId] = useState(null);
@@ -54,7 +54,7 @@ const TournamentList = () => {
 
   const handleSelectMatch = (matchId) => {
     if (selectedMatchId === matchId) {
-      setSelectedMatchId(null); // Deselect if the same match is clicked
+      setSelectedMatchId(null);
     } else {
       setSelectedMatchId(matchId);
     }

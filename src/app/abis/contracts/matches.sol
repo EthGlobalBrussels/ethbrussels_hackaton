@@ -2,11 +2,24 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
+import {FunctionsClient} from "@chainlink/contracts@1.1.1/src/v0.8/functions/v1_0_0/FunctionsClient.sol";
+import {ConfirmedOwner} from "@chainlink/contracts@1.1.1/src/v0.8/shared/access/ConfirmedOwner.sol";
+import {FunctionsRequest} from "@chainlink/contracts@1.1.1/src/v0.8/functions/v1_0_0/libraries/FunctionsRequest.sol";
+
 /**
  * @title Owner
  * @dev Set & change owner
  */
-contract Owner {
+contract FunctionsConsumerExample is FunctionsClient, ConfirmedOwner {
+    using FunctionsRequest for FunctionsRequest.Request;
+
+    bytes public s_lastResponse;
+    bytes public s_lastError;
+    bytes32 public s_lastRequestId;
+
+    error UnexpectedRequestID(bytes32 requestId);
+
+    event Response(bytes32 indexed requestId, bytes response, bytes err);
 
     struct Bet {
         address bettor;
@@ -27,7 +40,9 @@ contract Owner {
 
     uint256 private totalBets;
 
-    function getNumberOfWinners(uint256 _matchId) external view returns (uint256) {
+    function getNumberOfWinners(
+        uint256 _matchId
+    ) external view returns (uint256) {
         return winnersCount[_matchId];
     }
 
@@ -68,7 +83,9 @@ contract Owner {
     /**
      * @dev Set contract deployer as owner
      */
-    constructor() {
+    constructor(
+        address router
+    ) FunctionsClient(router) ConfirmedOwner(msg.sender) {
         console.log("Owner contract deployed by:", msg.sender);
         owner = msg.sender; // 'msg.sender' is sender of current call, contract deployer for a constructor
         emit OwnerSet(address(0), owner);
@@ -84,45 +101,44 @@ contract Owner {
     }
 
     /**
-     * @dev Return owner address 
+     * @dev Return owner address
      * @return address of owner
      */
     function getOwner() external view returns (address) {
-
         return owner;
     }
 
-    function getBetsByMatchId(uint256 _matchId) public view returns (Bet [] memory) {
-        
+    function getBetsByMatchId(
+        uint256 _matchId
+    ) public view returns (Bet[] memory) {
         return betsByMatchId[_matchId];
     }
 
     function CountWinners(uint256 _matchId, uint8 _winner) public {
-
-        require(winnersCount[_matchId] == 0, "Winners already accounted for this match");
+        if (winnersCount[_matchId] != 0)
+            CheckWinner(_matchId, _winner);
+        require(
+            winnersCount[_matchId] == 0,
+            "Winners already accounted for this match"
+        );
 
         Bet[] memory bets = getBetsByMatchId(_matchId);
 
-        for (uint256 i = 0; i < bets.length; i++)
-        {
-            if (bets[i].winner == _winner)
-                winnersCount[_matchId]++;
+        for (uint256 i = 0; i < bets.length; i++) {
+            if (bets[i].winner == _winner) winnersCount[_matchId]++;
         }
     }
 
-    function CheckWinner(uint256 _matchId, uint8 _winner) public
-    {
+    function CheckWinner(uint256 _matchId, uint8 _winner) public {
         Bet[] memory bets = getBetsByMatchId(_matchId);
 
-        for (uint256 i = 0; i < bets.length; i++)
-        {
+        for (uint256 i = 0; i < bets.length; i++) {
             if (msg.sender == bets[i].bettor && _winner == bets[i].winner)
                 sendPrize(_matchId, bets[i].bettor);
         }
     }
 
     function sendPrize(uint256 _matchId, address _recipient) internal {
-
         uint256 winners = winnersCount[_matchId];
 
         uint256 amount = (pool / numberOfMatches) / winners;
@@ -131,16 +147,11 @@ contract Owner {
     }
 
     function setBet(uint256 _matchId, uint8 _winner) public payable {
+        require(msg.value == 1e14, "Invalid amount");
 
-        require (msg.value == 1e14 , "Invalid amount");
+        Bet memory newBet = Bet({bettor: msg.sender, winner: _winner});
 
-        Bet memory newBet = Bet ({
-            bettor: msg.sender,
-            winner: _winner
-        });
-
-        if (betsByMatchId[_matchId].length == 0)
-            numberOfMatches++;
+        if (betsByMatchId[_matchId].length == 0) numberOfMatches++;
 
         betsByMatchId[_matchId].push(newBet);
 
@@ -151,4 +162,48 @@ contract Owner {
         pool += msg.value;
     }
 
+    function sendRequest(
+        string memory source,
+        bytes memory encryptedSecretsUrls,
+        uint8 donHostedSecretsSlotID,
+        uint64 donHostedSecretsVersion,
+        string[] memory args,
+        bytes[] memory bytesArgs,
+        uint64 subscriptionId,
+        uint32 gasLimit,
+        bytes32 donID
+    ) external onlyOwner returns (bytes32 requestId) {
+        FunctionsRequest.Request memory req;
+        req.initializeRequestForInlineJavaScript(source);
+        if (encryptedSecretsUrls.length > 0)
+            req.addSecretsReference(encryptedSecretsUrls);
+        else if (donHostedSecretsVersion > 0) {
+            req.addDONHostedSecrets(
+                donHostedSecretsSlotID,
+                donHostedSecretsVersion
+            );
+        }
+        if (args.length > 0) req.setArgs(args);
+        if (bytesArgs.length > 0) req.setBytesArgs(bytesArgs);
+        s_lastRequestId = _sendRequest(
+            req.encodeCBOR(),
+            subscriptionId,
+            gasLimit,
+            donID
+        );
+        return s_lastRequestId;
+    }
+
+    function fulfillRequest(
+        bytes32 requestId,
+        bytes memory response,
+        bytes memory err
+    ) internal override {
+        if (s_lastRequestId != requestId) {
+            revert UnexpectedRequestID(requestId);
+        }
+        s_lastResponse = response;
+        s_lastError = err;
+        emit Response(requestId, s_lastResponse, s_lastError);
+    }
 }

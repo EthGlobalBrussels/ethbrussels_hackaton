@@ -5,6 +5,7 @@ import Burger from './burger_menu';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import Api from './api';
 import ProfileClient from "./userData/userProfile";
+import SetTransaction from "./transaction/setTransaction";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }) {
           <div className="z-30 relative flex flex-col items-center justify-center w-full h-full">
             <h1 className="font-bold text-6xl text-transparent bg-clip-text bg-gradient-to-tr from-cyan-400 to-slate-900">ArenaBet</h1>           
             <Menu />
+			<SetTransaction matchId={5} team={0}/>
             <Api />
             {children}
           </div>

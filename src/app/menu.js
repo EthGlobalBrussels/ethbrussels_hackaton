@@ -17,7 +17,7 @@ export default function Menu() {
 		  <Link href='/' style={{ alignSelf: 'center' }}>
 			Available bet
 		  </Link>
-			{/* <ConnectWallet/> */}
+			<ConnectWallet/>
 		  </div>
 		</div>
 	);

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",
+    "@metamask/sdk": "^0.26.5",
     "ethers": "^6.13.1",
     "next": "14.2.5",
     "react": "^18",

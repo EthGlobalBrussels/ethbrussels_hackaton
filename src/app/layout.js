@@ -2,7 +2,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Menu from './menu'
 import { UserProvider } from '@auth0/nextjs-auth0/client';
-import ProfileClient from "./userData/userProfile";
+import SetTransaction from "./transaction/setTransaction";
+import React from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,14 +13,18 @@ export const metadata = {
 };
 
 
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-    <UserProvider>
-	<body className={inter.className}>
-		<Menu></Menu>
-		{children}</body>
-    </UserProvider>
-    </html>
-  );
-}
+const RootLayout = ({ children }) => {
+	return (
+	  <html lang="en">
+		<UserProvider>
+		  <body>
+			<Menu />
+			<SetTransaction />
+			{children}
+		  </body>
+		</UserProvider>
+	  </html>
+	);
+  };
+
+  export default RootLayout;

@@ -1,10 +1,10 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Menu from './menu';
+import Burger from './burger_menu';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
-import React from "react";
 import Api from './api';
-import SetTransaction from "./transaction/setTransaction";
+import ProfileClient from "./userData/userProfile";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,28 +17,31 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <UserProvider>
-        <body className="relative min-h-screen  items-center justify-center overflow-hidden bg-black text-white m-10">
-          <Menu />
-         <Api/>
-          {children}
-
-          {/* Spotlights */}
-          
+        <body className="relative min-h-screen  flex flex-col items-center justify-center  bg-black text-white m-10">
+          {/* Gradient Divs */}
+          <div className="absolute inset-0 z-0">
             <div 
-              className=" w-96 h-96 rounded-full fixed top-0 left-0"
+              className="w-96 h-96 rounded-full absolute top-0 left-0 z-10"
               style={{
                 background: 'radial-gradient(circle, rgba(255,0,150,0.5) 0%, rgba(255,0,150,0) 80%)'
               }}
             ></div>
             <div 
-              className="w-96 h-96 rounded-full  fixed top-[50%] left-[50%]"
+              className="w-96 h-96 rounded-full absolute top-[50%] left-[50%] transform translate[-50%,-50%] z-20"
               style={{
                 background: 'radial-gradient(circle, rgba(0,204,255,0.5) 0%, rgba(0,204,255,0) 76%)'
               }}
             ></div>
-        <SetTransaction/>
+          </div>
+
+          {/* Content */}
+          <div className="z-30 relative flex flex-col items-center justify-center w-full h-full">
+            <h1 className="font-bold text-6xl text-transparent bg-clip-text bg-gradient-to-tr from-cyan-400 to-slate-900">ArenaBet</h1>           
+            <Menu />
+            <Api />
+            {children}
+          </div>
         </body>
-		
       </UserProvider>
     </html>
   );

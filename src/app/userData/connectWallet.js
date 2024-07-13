@@ -54,14 +54,14 @@ const ConnectWallet = () => {
   };
 
   return (
-    <div>
+    <div className='justify-center text-center items-center m-auto flex'>
       {walletAddress ? (
         <div>
           <p>Connected with address: {walletAddress}</p>
           <button onClick={logoutHandler}>Log Out</button>
         </div>
       ) : (
-        <button onClick={connectWalletHandler}>Connect Wallet</button>
+        <button className=' bg-gradient-to-r from-blue-500 to-pink-600 px-4 py-2  rounded-full w-full my-5' onClick={connectWalletHandler}>Connect Wallet</button>
       )}
       {errorMessage && <p>{errorMessage}</p>}
     </div>

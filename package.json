@@ -14,11 +14,13 @@
     "cors": "^2.8.5",
     "cors-anywhere": "^0.4.4",
     "dotenv": "^16.4.5",
-    "ethers": "^6.13.1",
     "express": "^4.19.2",
     "next": "14.2.5",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "@chainlink/env-enc": "^1.0.5",
+    "@chainlink/functions-toolkit": "^0.2.7",
+    "ethers": "^5.7.2"
   },
   "devDependencies": {
     "postcss": "^8",

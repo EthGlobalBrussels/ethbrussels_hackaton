@@ -1,7 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Menu from './menu';
-import { UserProvider } from '@auth0/nextjs-auth0/client';
 import SetTransaction from "./transaction/setTransaction";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -14,7 +13,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <UserProvider>
         <body className="relative min-h-screen flex flex-col items-center justify-center bg-black text-white m-10">
          
           <div className="fixed inset-0 z-0">
@@ -42,7 +40,6 @@ export default function RootLayout({ children }) {
             {children}
           </div>
         </body>
-      </UserProvider>
     </html>
   );
 }

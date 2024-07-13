@@ -51,7 +51,7 @@ const TournamentList = () => {
 
   const handleSelectMatch = (matchId) => {
     if (selectedMatchId === matchId) {
-      setSelectedMatchId(null); // Deselect if the same match is clicked
+      setSelectedMatchId(null);
     } else {
       setSelectedMatchId(matchId);
     }

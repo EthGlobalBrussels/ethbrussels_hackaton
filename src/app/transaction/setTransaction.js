@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import abi from '../abis/contractAbi.json';
 import Web3 from 'web3';
+import axios from 'axios'
 
 const SetTransaction = ({matchId, team}) => {
 
@@ -24,6 +25,11 @@ const SetTransaction = ({matchId, team}) => {
 		});
 
         console.log('Transaction successful:', result);
+
+		const apiUrl = `https://eth-sepolia.blockscout.com/api?module=transaction&action=gettxinfo&txhash=${result.transactionHash}`;
+		const response = await axios.get(apiUrl);
+  
+		console.log('BlockScout API response:', response.data);
     
 }
   return (

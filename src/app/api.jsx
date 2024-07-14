@@ -124,7 +124,7 @@ const TournamentList = () => {
                 </button> 
 				<button onClick={() => GetWinners(event.match.id, 0)} className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full'>
                  Claim
-                </button> 
+                </button>
               </div>
             )}
           </li>

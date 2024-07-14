@@ -4,7 +4,7 @@ import abi from '../abis/contractAbi.json';
 import axios from 'axios'
 
 export async function sendTx(matchId, team) {
-	const contractAddress = '0x02a454Cc4068F0cc093c22544989a6a79BC27E54';
+	const contractAddress = '0xfBcf66Dc9D36814E011d06fc569d8B154E7C5a83';
 
 	const web3 = new Web3(window.ethereum);
 

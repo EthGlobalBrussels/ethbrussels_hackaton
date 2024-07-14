@@ -103,7 +103,7 @@ const TournamentList = () => {
                     className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full cursor-pointer'
                     onClick={() => handleSelectMatch(event.match.id)}
                   >
-                    Select Match
+                 Select Match
                   </h1>
                 </div>
                 {selectedMatchId === event.match.id && (
@@ -119,8 +119,11 @@ const TournamentList = () => {
               </div>
             ) : (
               <div className='flex'>
-                 <button className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full'>
+                 <button onClick={() => sendTx(event.match.id, 0)} className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full'>
                  Claim
+                </button> 
+				<button onClick={() => GetWinners(event.match.id, 0)} className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full'>
+                 select
                 </button> 
               </div>
             )}

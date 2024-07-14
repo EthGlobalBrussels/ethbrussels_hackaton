@@ -1,23 +1,37 @@
 // web3Utils.js
 import Web3 from 'web3';
 import abi from '../abis/contractAbi.json';
+import axios from 'axios'
 
 export async function sendTx(matchId, team) {
-  const contractAddress = '0x7B71D14085ef8f57e3C2AA4CabEA8d2087d05B85';
+	const contractAddress = '0x02a454Cc4068F0cc093c22544989a6a79BC27E54';
 
-  const web3 = new Web3(window.ethereum);
+	const web3 = new Web3(window.ethereum);
 
-  // Get the connected user's Ethereum address
-  const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+	// Get the connected user's Ethereum address
+	const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-  const userAddress = accounts[0];
+	const userAddress = accounts[0];
 
-  const contract = new web3.eth.Contract(abi, contractAddress);
+	const contract = new web3.eth.Contract(abi, contractAddress);
 
-  const result = await contract.methods.setBet(matchId, team).send({
-    from: userAddress,
-    value: web3.utils.toWei('0.0001', 'ether'),  // Send 0.0001 ether (1e14 wei)
-  });
+	const result = await contract.methods.setBet(matchId, team).send({
+		from: userAddress,
+		value: web3.utils.toWei('0.0001', 'ether'),  // Send 0.0001 ether (1e14 wei)
+	});
 
-  console.log('Transaction successful:', result);
+	console.log('Transaction successful:', result.transactionHash);
+
+	const blockScoutUrl = 'https://eth-sepolia.blockscout.com/tx/';
+
+	const hash = result.transactionHash
+
+	const transactionLink = `${blockScoutUrl}${hash}`;
+
+	console.log('BlockScout transaction link:', transactionLink);
+	const apiUrl = `https://eth-sepolia.blockscout.com/api?module=transaction&action=gettxreceiptstatus&txhash=${hash}`;
+
+	const response = await axios.get(apiUrl);
+
+	console.log('BlockScout API response:', response.data);
 }

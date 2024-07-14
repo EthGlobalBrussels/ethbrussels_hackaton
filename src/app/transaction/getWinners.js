@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import abi from '../abis/contractAbi.json';
 
 export async function GetWinners(matchId, team) {
-  const contractAddress = '0x7B71D14085ef8f57e3C2AA4CabEA8d2087d05B85';
+  const contractAddress = '0x02a454Cc4068F0cc093c22544989a6a79BC27E54';
 
   const web3 = new Web3(window.ethereum);
 

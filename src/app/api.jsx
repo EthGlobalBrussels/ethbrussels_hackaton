@@ -9,7 +9,8 @@ const TournamentList = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('unstarted'); // New state for filtering
+  const [filter, setFilter] = useState('unstarted');
+  const [transactionLink, setTransactionLink] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +49,6 @@ const TournamentList = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  // Filter events based on the selected filter
   const filteredEvents = events.filter(event => 
     filter === 'unstarted' ? event.state === 'unstarted' : event.state === 'completed'
   );
@@ -63,10 +63,20 @@ const TournamentList = () => {
 
   const handleClick = async (matchId, team) => {
     try {
-      const result = await sendTx(matchId, team);
-      console.log('Transaction successful in TournamentList:', result);
+      const link = await sendTx(matchId, team);
+      console.log('Transaction successful in TournamentList:', link);
+      setTransactionLink(link); // Set the transaction link state
     } catch (error) {
       console.error('Error in TournamentList:', error);
+    }
+  };
+
+  const handleClaim = (matchId) => {
+    const winnerIndex = findWinnerIndex(matchId);
+    if (winnerIndex !== -1) {
+      GetWinners(winnerIndex);
+    } else {
+      console.error('Could not determine winner index');
     }
   };
 
@@ -103,33 +113,43 @@ const TournamentList = () => {
                     className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full cursor-pointer'
                     onClick={() => handleSelectMatch(event.match.id)}
                   >
-                 Select Match
+                    Select Match
                   </h1>
                 </div>
                 {selectedMatchId === event.match.id && (
                   <motion.div className='mt-4 grid md:grid-cols-2 gap-2'>
-                    <button onClick={() => sendTx(event.match.id, 0)} className='shadow-lg mx-auto my-1 px-5 w-40 bg-gradient-to-r from-green-500 to-blue-600 py-2 rounded-full'>
-                      Bet {event.match.teams[0].name}
-                    </button>
-                    <button onClick={() => sendTx(event.match.id, 1)} className='shadow-lg mx-auto my-1 px-5 w-40 bg-gradient-to-r from-red-500 to-yellow-600 py-2 rounded-full'>
-                      Bet {event.match.teams[1].name}
-                    </button>
+                    {event.match.teams.map((team, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleClick(event.match.id, index)}
+                        className={`shadow-lg mx-auto my-1 px-5 w-40 bg-gradient-to-r from-green-500 to-blue-600  py-2 rounded-full`}
+                      >
+                        Bet {team.name}
+                      </button>
+                    ))}
                   </motion.div>
                 )}
               </div>
             ) : (
               <div className='flex'>
-                 <button onClick={() => sendTx(event.match.id, 0)} className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full'>
-                 Select
+                <button onClick={() => handleClick(event.match.id, 0)} className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full'>
+                  Select
                 </button> 
-				<button onClick={() => GetWinners(event.match.id, 0)} className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full'>
-                 Claim
-                </button>
+                <button onClick={() => GetWinners(event.match.id, 0)} className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full'>
+                  Claim
+                </button> 
               </div>
             )}
           </li>
         ))}
       </ul>
+      {transactionLink && (
+        <div className='fixed bottom-0 right-0 mb-4 mr-4 p-4 bg-white shadow-lg rounded-lg'>
+          <a href={transactionLink} target="_blank" rel="noopener noreferrer">
+            View Transaction
+          </a>
+        </div>
+      )}
     </div>
   );
 };

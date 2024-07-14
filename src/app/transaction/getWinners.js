@@ -2,8 +2,8 @@
 import Web3 from 'web3';
 import abi from '../abis/contractAbi.json';
 
-export async function sendTx(matchId, team) {
-  const contractAddress = '0x2edB266fd1BDd569459115b257aE75C252b7aCE0';
+export async function GetWinners(matchId, team) {
+  const contractAddress = '0x7B71D14085ef8f57e3C2AA4CabEA8d2087d05B85';
 
   const web3 = new Web3(window.ethereum);
 
@@ -14,10 +14,7 @@ export async function sendTx(matchId, team) {
 
   const contract = new web3.eth.Contract(abi, contractAddress);
 
-  const result = await contract.methods.setBet(matchId, team).send({
-    from: userAddress,
-    value: web3.utils.toWei('0.0001', 'ether'),  // Send 0.0001 ether (1e14 wei)
-  });
+  const result = await contract.methods.CountWinners(matchId, team);
 
   console.log('Transaction successful:', result);
 }

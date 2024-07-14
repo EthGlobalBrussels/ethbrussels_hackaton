@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import abi from '../abis/contractAbi.json';
 
 export async function sendTx(matchId, team) {
-  const contractAddress = '0x2edB266fd1BDd569459115b257aE75C252b7aCE0';
+  const contractAddress = '0x7B71D14085ef8f57e3C2AA4CabEA8d2087d05B85';
 
   const web3 = new Web3(window.ethereum);
 

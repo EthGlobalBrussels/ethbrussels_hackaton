@@ -1,7 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { sendTx } from './transaction/getWinners';
+import { sendTx } from './transaction/setTransaction';
+import { GetWinners } from './transaction/getWinners';
 
 const TournamentList = () => {
   const [selectedMatchId, setSelectedMatchId] = useState(null);
@@ -118,9 +119,9 @@ const TournamentList = () => {
               </div>
             ) : (
               <div className='flex'>
-                <button className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full'>
-                  Claim
-                </button>
+                 <button className='shadow-lg mx-auto my-5 px-10 bg-gradient-to-r from-blue-500 to-pink-600 py-2 rounded-full'>
+                 Claim
+                </button> 
               </div>
             )}
           </li>

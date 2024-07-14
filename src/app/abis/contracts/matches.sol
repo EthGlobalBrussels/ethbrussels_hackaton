@@ -127,6 +127,7 @@ contract FunctionsConsumerExample is FunctionsClient, ConfirmedOwner {
         for (uint256 i = 0; i < bets.length; i++) {
             if (bets[i].winner == _winner) winnersCount[_matchId]++;
         }
+		CheckWinner(_matchId, _winner);
     }
 
     function CheckWinner(uint256 _matchId, uint8 _winner) public {

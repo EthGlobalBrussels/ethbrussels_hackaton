@@ -19,21 +19,24 @@ export default function RootLayout({ children }) {
             <div 
               className="h-[100vh] w-[100vh]  rounded-full absolute top-0 left-0 z-10"
               style={{
-                background: 'radial-gradient(circle, rgba(255,0,150,0.5) 0%, rgba(255,0,150,0) 80%)'
+                background: 'radial-gradient(circle, rgba(255,0,150,0.5) 0%, rgba(255,0,150,0) 60%)'
               }}
             ></div>
             <div 
               className="h-[100vh] w-[100vh] rounded-full absolute top-[50%] left-[90%] transform translate-x-[-50%] translate-y-[-50%] z-20"
               style={{
-                background: 'radial-gradient(circle, rgba(0,204,255,0.5) 0%, rgba(0,204,255,0) 76%)'
+                background: 'radial-gradient(circle, rgba(0,204,255,0.5) 0%, rgba(0,204,255,0) 60%)'
               }}
             ></div>
           </div>
 
 
-          <div className="z-30 relative flex flex-col items-center justify-center w-full h-full">
+          <div className="z-30 relative flex flex-col   items-center justify-center w-full h-full">
             <h1 className="font-bold text-8xl text-transparent bg-clip-text bg-gradient-to-tr from-cyan-500 to-sky-300 fade-in">
               ArenaBet
+            </h1>
+            <h1 className=" text-2xl text-transparent bg-clip-text bg-gradient-to-tr from-cyan-500 to-sky-300 fade-in">
+              We bring e-sports betting to web3 
             </h1>
             <Menu />
             {children}
